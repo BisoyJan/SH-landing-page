@@ -1,0 +1,248 @@
+import React from 'react';
+import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
+
+const SpaWebsite = () => {
+  return (
+    <div className="min-h-screen text-white bg-black">
+      {/* Hero Section with Background Image */}
+      <div className="relative h-screen">
+        <div className="absolute inset-0 bg-black/70">
+          {/* Use your first image for background */}
+          <img 
+            src="/images/bg.jpg" 
+            alt="Spa treatment room with cherry blossoms"
+            className="object-cover w-full h-full opacity-30"
+          />
+        </div>
+        <div className="absolute inset-0 flex flex-col items-center justify-center p-4 text-center">
+          {/* Use image 5 (logo) here */}
+          <img 
+            src="/images/massage2.jpg" 
+            alt="PSH Logo" 
+            className="w-32 h-32 mb-8 rounded-full"
+          />
+          <h1 className="mb-4 font-serif text-5xl">Pure Sakura Healing</h1>
+          <h2 className="mb-8 font-serif text-2xl text-pink-300">Japanese Wellness Spa</h2>
+          <p className="max-w-2xl mx-auto mb-8 text-lg">
+            Experience authentic Japanese "OMOTENASHI" service with our carefully selected treatments 
+            designed to relax both your mind and body. Our certified therapists bring the essence of 
+            Japan to every session.
+          </p>
+          <button className="px-8 py-3 text-lg transition bg-pink-500 rounded-full hover:bg-pink-600">
+            Book Now
+          </button>
+        </div>
+      </div>
+
+      {/* Services Section */}
+      <section className="px-4 py-20 bg-gray-900">
+        <div className="max-w-6xl mx-auto">
+          <h2 className="mb-16 font-serif text-3xl text-center">Our Services</h2>
+          <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+            {services.map((service, index) => (
+              <div key={index} className="relative group">
+                <img 
+                  src="/api/placeholder/400/300" 
+                  alt={service.name}
+                  className="object-cover w-full h-64 transition rounded-lg brightness-75 group-hover:brightness-100"
+                />
+                <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black">
+                  <h3 className="mb-2 font-serif text-xl">{service.name}</h3>
+                  <p className="text-gray-300">{service.description}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Hot Stone Therapy Feature */}
+      <section className="px-4 py-20">
+        <h2 className="mb-16 font-serif text-3xl text-center">Signature Hot Stone Therapy</h2>
+        <div className="max-w-6xl mx-auto">
+          <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
+            {/* Use image 2 here - hot stone therapy */}
+            <img 
+              src="/api/placeholder/600/400" 
+              alt="Hot stone therapy treatment"
+              className="object-cover w-full rounded-lg h-80"
+            />
+            <div className="flex flex-col justify-center">
+              <h3 className="mb-4 font-serif text-2xl">Traditional Japanese Technique</h3>
+              <p className="mb-6 text-gray-300">
+                Our signature hot stone therapy combines smooth, heated basalt stones with traditional
+                Japanese massage techniques. The warmth of the stones helps to relax muscles and improve
+                circulation while our skilled therapists apply gentle pressure for deep relaxation.
+              </p>
+              <ul className="space-y-4">
+                <li className="flex items-center">
+                  <span className="w-2 h-2 mr-3 bg-pink-500 rounded-full"></span>
+                  Premium basalt stones for optimal heat retention
+                </li>
+                <li className="flex items-center">
+                  <span className="w-2 h-2 mr-3 bg-pink-500 rounded-full"></span>
+                  Authentic Japanese aromatherapy oils
+                </li>
+                <li className="flex items-center">
+                  <span className="w-2 h-2 mr-3 bg-pink-500 rounded-full"></span>
+                  Customized pressure and technique for your needs
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Treatment Room Gallery */}
+      <section className="px-4 py-20 bg-gray-900">
+        <h2 className="mb-16 font-serif text-3xl text-center">Our Wellness Space</h2>
+        <div className="max-w-6xl mx-auto">
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
+            {/* Use image 1, 3, and 4 here for the treatment rooms */}
+            <div className="overflow-hidden rounded-lg">
+              <img 
+                src="/api/placeholder/400/600" 
+                alt="Treatment room with cherry blossoms"
+                className="object-cover w-full transition duration-500 h-80 hover:scale-105"
+              />
+            </div>
+            <div className="overflow-hidden rounded-lg">
+              <img 
+                src="/api/placeholder/400/600" 
+                alt="Hot stone treatment setup"
+                className="object-cover w-full transition duration-500 h-80 hover:scale-105"
+              />
+            </div>
+            <div className="overflow-hidden rounded-lg">
+              <img 
+                src="/api/placeholder/400/600" 
+                alt="Spa treatment area"
+                className="object-cover w-full transition duration-500 h-80 hover:scale-105"
+              />
+            </div>
+          </div>
+          <div className="mt-12 text-center">
+            <p className="max-w-3xl mx-auto text-gray-300">
+              Our tranquil treatment rooms feature premium massage beds, soft lighting, and authentic 
+              Japanese aesthetics enhanced with cherry blossoms. Each space is designed to transport 
+              you to the peaceful gardens of Japan.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Booking Form */}
+      <section className="px-4 py-20">
+        <div className="max-w-md mx-auto">
+          <h2 className="mb-8 font-serif text-3xl text-center">Book Your Session</h2>
+          <form className="space-y-6">
+            <div className="space-y-4">
+              <input
+                type="text"
+                placeholder="Full Name"
+                className="w-full p-3 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:border-pink-500"
+              />
+              <input
+                type="tel"
+                placeholder="Contact Number"
+                className="w-full p-3 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:border-pink-500"
+              />
+              <input
+                type="email"
+                placeholder="Email Address"
+                className="w-full p-3 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:border-pink-500"
+              />
+              <select className="w-full p-3 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:border-pink-500">
+                <option value="">Select Treatment</option>
+                <option value="swedish">Swedish Massage</option>
+                <option value="shiatsu">Shiatsu Massage</option>
+                <option value="hotstone">Hot Stone Therapy</option>
+                <option value="signature">Signature Cherry Blossom Experience</option>
+              </select>
+              <textarea
+                placeholder="Any special requests or notes?"
+                rows={4}
+                className="w-full p-3 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:border-pink-500"
+              />
+            </div>
+            <button className="w-full py-3 text-white transition bg-pink-500 rounded-lg hover:bg-pink-600">
+              Book Now
+            </button>
+          </form>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="px-4 py-12 bg-black border-t border-gray-800">
+        <div className="grid max-w-6xl grid-cols-1 gap-8 mx-auto md:grid-cols-3">
+          <div>
+            <img 
+              src="/api/placeholder/150/150" 
+              alt="PSH Logo" 
+              className="w-24 h-24 mb-4 rounded-full"
+            />
+            <p className="text-gray-400">
+              Experience authentic Japanese wellness and healing traditions in a serene environment.
+            </p>
+          </div>
+          <div>
+            <h3 className="mb-4 font-serif text-xl">Contact</h3>
+            <ul className="space-y-2 text-gray-400">
+              <li>Email: info@puresakurahealing.com</li>
+              <li>Phone: (555) 123-4567</li>
+              <li>Address: 123 Wellness Street, Serenity City</li>
+              <li>Hours: Mon-Sat 9AM-8PM, Sun 10AM-6PM</li>
+            </ul>
+          </div>
+          <div>
+            <h3 className="mb-4 font-serif text-xl">Follow Us</h3>
+            <div className="flex mb-6 space-x-4">
+              <a href="#" className="text-gray-400 transition hover:text-pink-500">
+                <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                </svg>
+              </a>
+              <a href="#" className="text-gray-400 transition hover:text-pink-500">
+                <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M12 0C8.74 0 8.333.015 7.053.072 5.775.132 4.905.333 4.14.63c-.789.306-1.459.717-2.126 1.384S.935 3.35.63 4.14C.333 4.905.131 5.775.072 7.053.012 8.333 0 8.74 0 12s.015 3.667.072 4.947c.06 1.277.261 2.148.558 2.913.306.788.717 1.459 1.384 2.126.667.666 1.336 1.079 2.126 1.384.766.296 1.636.499 2.913.558C8.333 23.988 8.74 24 12 24s3.667-.015 4.947-.072c1.277-.06 2.148-.262 2.913-.558.788-.306 1.459-.718 2.126-1.384.666-.667 1.079-1.335 1.384-2.126.296-.765.499-1.636.558-2.913.06-1.28.072-1.687.072-4.947s-.015-3.667-.072-4.947c-.06-1.277-.262-2.149-.558-2.913-.306-.789-.718-1.459-1.384-2.126C21.319 1.347 20.651.935 19.86.63c-.765-.297-1.636-.499-2.913-.558C15.667.012 15.26 0 12 0zm0 2.16c3.203 0 3.585.016 4.85.071 1.17.055 1.805.249 2.227.415.562.217.96.477 1.382.896.419.42.679.819.896 1.381.164.422.36 1.057.413 2.227.057 1.266.07 1.646.07 4.85s-.015 3.585-.074 4.85c-.061 1.17-.256 1.805-.421 2.227-.224.562-.479.96-.899 1.382-.419.419-.824.679-1.38.896-.42.164-1.065.36-2.235.413-1.274.057-1.649.07-4.859.07-3.211 0-3.586-.015-4.859-.074-1.171-.061-1.816-.256-2.236-.421-.569-.224-.96-.479-1.379-.899-.421-.419-.69-.824-.9-1.38-.165-.42-.359-1.065-.42-2.235-.045-1.26-.061-1.649-.061-4.844 0-3.196.016-3.586.061-4.861.061-1.17.255-1.814.42-2.234.21-.57.479-.96.9-1.381.419-.419.81-.689 1.379-.898.42-.166 1.051-.361 2.221-.421 1.275-.045 1.65-.06 4.859-.06l.045.03zm0 3.678c-3.405 0-6.162 2.76-6.162 6.162 0 3.405 2.76 6.162 6.162 6.162 3.405 0 6.162-2.76 6.162-6.162 0-3.405-2.76-6.162-6.162-6.162zM12 16c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4zm7.846-10.405c0 .795-.646 1.44-1.44 1.44-.795 0-1.44-.646-1.44-1.44 0-.794.646-1.439 1.44-1.439.793-.001 1.44.645 1.44 1.439z"/>
+                </svg>
+              </a>
+            </div>
+            <p className="text-sm text-gray-400">
+              &copy; {new Date().getFullYear()} Pure Sakura Healing. All rights reserved.
+            </p>
+          </div>
+        </div>
+      </footer>
+    </div>
+  );
+};
+
+const services = [
+  {
+    name: "Swedish Massage",
+    description: "Traditional oil massage for deep relaxation and improved circulation."
+  },
+  {
+    name: "Shiatsu Massage",
+    description: "Japanese pressure point therapy to balance energy flow and reduce stress."
+  },
+  {
+    name: "Hot Stone Therapy",
+    description: "Premium hot stone massage with authentic Japanese techniques for ultimate relaxation."
+  },
+  {
+    name: "Aromatherapy Session",
+    description: "Custom blend of Japanese essential oils to elevate your massage experience."
+  },
+  {
+    name: "Cherry Blossom Special",
+    description: "Our signature treatment combining multiple techniques with sakura-infused products."
+  },
+  {
+    name: "Couples Experience",
+    description: "Share the healing journey with a partner in our specially designed suite."
+  }
+];
+
+export default SpaWebsite;
