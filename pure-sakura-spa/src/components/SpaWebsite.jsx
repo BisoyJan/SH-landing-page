@@ -220,48 +220,60 @@ const SpaWebsite = () => {
 				</div>
 			</section>
 
-			{/* Booking Form */}
+			{/* Booking Form and Map */}
 			<section className="px-4 py-20">
-				<div className="max-w-md mx-auto">
-					<h2 className="mb-8 font-serif text-3xl text-center">
-						Book Your Session
-					</h2>
-					<form className="space-y-6">
-						<div className="space-y-4">
-							<input
-								type="text"
-								placeholder="Full Name"
-								className="w-full p-3 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:border-pink-500"
-							/>
-							<input
-								type="tel"
-								placeholder="Contact Number"
-								className="w-ful</svg>l p-3 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:border-pink-500"
-							/>
-							<input
-								type="email"
-								placeholder="Email Address"
-								className="w-full p-3 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:border-pink-500"
-							/>
-							<select className="w-full p-3 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:border-pink-500">
-								<option value="">Select Treatment</option>
-								<option value="swedish">Swedish Massage</option>
-								<option value="shiatsu">Shiatsu Massage</option>
-								<option value="hotstone">Hot Stone Therapy</option>
-								<option value="signature">
-									Signature Cherry Blossom Experience
-								</option>
-							</select>
-							<textarea
-								placeholder="Any special requests or notes?"
-								rows={4}
-								className="w-full p-3 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:border-pink-500"
-							/>
-						</div>
-						<button className="w-full py-3 text-white transition bg-pink-500 rounded-lg hover:bg-pink-600">
-							Book Now
-						</button>
-					</form>
+				<div className="grid max-w-6xl grid-cols-1 gap-8 mx-auto md:grid-cols-2">
+					<div>
+						<h2 className="mb-8 font-serif text-3xl text-center">
+							Book Your Session
+						</h2>
+						<form className="space-y-6">
+							<div className="space-y-4">
+								<input
+									type="text"
+									placeholder="Full Name"
+									className="w-full p-3 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:border-pink-500"
+								/>
+								<input
+									type="tel"
+									placeholder="Contact Number"
+									className="w-full p-3 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:border-pink-500"
+								/>
+								<input
+									type="email"
+									placeholder="Email Address"
+									className="w-full p-3 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:border-pink-500"
+								/>
+								<select className="w-full p-3 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:border-pink-500">
+									<option value="">Select Treatment</option>
+									<option value="swedish">Swedish Massage</option>
+									<option value="shiatsu">Shiatsu Massage</option>
+									<option value="hotstone">Hot Stone Therapy</option>
+									<option value="signature">
+										Signature Cherry Blossom Experience
+									</option>
+								</select>
+								<textarea
+									placeholder="Any special requests or notes?"
+									rows={4}
+									className="w-full p-3 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:border-pink-500"
+								/>
+							</div>
+							<button className="w-full py-3 text-white transition bg-pink-500 rounded-lg hover:bg-pink-600">
+								Book Now
+							</button>
+						</form>
+					</div>
+					<div className="w-full h-full min-h-[400px] rounded-lg overflow-hidden">
+						<iframe
+							src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d331823.7402851301!2d120.66378321651236!3d14.566305186929052!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3397c9abc24f9f85%3A0xd920d66f8809d165!2s7829%20Makati%20Ave%2C%20Makati%2C%20Metro%20Manila!5e1!3m2!1sen!2sph!4v1739808185273!5m2!1sen!2sph"
+							width="600"
+							height="450"
+							style={{ border: 0 }}
+							allowFullScreen=""
+							loading="lazy"
+							referrerPolicy="no-referrer-when-downgrade"></iframe>
+					</div>
 				</div>
 			</section>
 
