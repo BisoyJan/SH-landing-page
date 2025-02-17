@@ -467,9 +467,9 @@ const services = [
 
 const testimonials = [
 	{
-		name: 'Sarah Johnson',
+		name: 'Nuk Herzfled',
 		quote:
-			"The Japanese massage techniques used here are truly authentic. I've never felt more relaxed and rejuvenated. The attention to detail and the peaceful ambiance make every visit special.",
+			'"I went there today for my first Swedish massage and my masseuse was called Wendy. The massage facilities are very clean and the material is good so you can lie down comfortably. All the staff are very friendly and I have never had a better massage. I am already looking forward to future visits."',
 	},
 	{
 		name: 'John Tanaka',
