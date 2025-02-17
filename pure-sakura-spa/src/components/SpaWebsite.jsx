@@ -1,7 +1,11 @@
+'use client';
+
 import React from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 
 const SpaWebsite = () => {
+	const [activeIndex, setActiveIndex] = React.useState(0);
+
 	return (
 		<div className="min-h-screen text-white bg-black">
 			{/* Hero Section with Background Image */}
@@ -17,7 +21,7 @@ const SpaWebsite = () => {
 				<div className="absolute inset-0 flex flex-col items-center justify-center p-4 text-center">
 					{/* Use image 5 (logo) here */}
 					<img
-						src="/images/rmvbg (1).png"
+						src="/images/logo.png"
 						alt="PSH Logo"
 						className="w-32 h-32 mb-8 rounded-full"
 					/>
@@ -48,15 +52,18 @@ const SpaWebsite = () => {
 			<section className="px-4 py-20 bg-gray-900">
 				<div className="max-w-6xl mx-auto">
 					<h2 className="mb-16 font-serif text-3xl text-center">
-						Our Services
+						Our Massage Services
 					</h2>
 					<div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
 						{services.map((service, index) => (
 							<div key={index} className="relative group">
 								<img
-									src="/api/placeholder/400/300"
+									src={service.image}
 									alt={service.name}
 									className="object-cover w-full h-64 transition rounded-lg brightness-75 group-hover:brightness-100"
+									onError={(e) => {
+										e.target.src = '/images/Massage.jpg';
+									}}
 								/>
 								<div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black">
 									<h3 className="mb-2 font-serif text-xl">{service.name}</h3>
@@ -152,6 +159,67 @@ const SpaWebsite = () => {
 				</div>
 			</section>
 
+			{/* Testimonial Carousel */}
+			<section className="px-4 py-20 bg-gray-900">
+				<h2 className="mb-16 font-serif text-3xl text-center">
+					Client Testimonials
+				</h2>
+
+				<div className="max-w-4xl mx-auto overflow-hidden">
+					<div className="relative">
+						<div className="flex transition-transform duration-700 ease-in-out">
+							{testimonials.map((testimonial, index) => (
+								<div
+									key={index}
+									className="w-full flex-shrink-0 px-8 py-10 bg-black rounded-lg"
+									style={{
+										transform: `translateX(-${activeIndex * 100}%)`,
+										transition: 'transform 0.7s ease-in-out',
+									}}>
+									<svg
+										className="absolute text-pink-500/10 right-4 top-4"
+										width="120"
+										height="120"
+										viewBox="0 0 24 24"
+										fill="currentColor">
+										<path d="M11.192 15.757c0-.88-.23-1.618-.69-2.217-.326-.412-.768-.683-1.327-.812-.55-.128-1.07-.137-1.54-.028-.16-.95.1-1.956.76-3.022.66-1.065 1.515-1.867 2.558-2.403L9.373 5c-.8.396-1.56.898-2.26 1.505-.71.607-1.34 1.305-1.9 2.094s-.98 1.68-1.25 2.69-.346 2.04-.217 3.1c.168 1.4.62 2.52 1.356 3.35.735.84 1.652 1.26 2.748 1.26.965 0 1.766-.29 2.4-.878.628-.576.94-1.365.94-2.368l.002.003zm9.124 0c0-.88-.23-1.618-.69-2.217-.326-.42-.77-.692-1.327-.817-.56-.124-1.074-.13-1.54-.022-.16-.94.09-1.95.75-3.02.66-1.06 1.514-1.86 2.557-2.4L18.49 5c-.8.396-1.555.898-2.26 1.505-.708.607-1.34 1.305-1.894 2.094-.556.79-.97 1.68-1.24 2.69-.273 1-.345 2.04-.217 3.1.168 1.4.62 2.52 1.356 3.35.735.84 1.652 1.26 2.748 1.26.965 0 1.766-.29 2.4-.878.628-.576.94-1.365.94-2.368l.002.003z" />
+									</svg>
+
+									<blockquote className="relative">
+										<p className="text-lg text-gray-200">{testimonial.quote}</p>
+										<footer className="mt-6">
+											<div className="flex items-center">
+												<div className="ml-4">
+													<p className="text-base font-semibold text-white">
+														{testimonial.name}
+													</p>
+													<p className="text-sm text-gray-400">
+														Regular Client
+													</p>
+												</div>
+											</div>
+										</footer>
+									</blockquote>
+								</div>
+							))}
+						</div>
+
+						{/* Carousel Indicators */}
+						<div className="flex justify-center mt-6 space-x-2">
+							{testimonials.map((_, index) => (
+								<button
+									key={index}
+									className={`w-2 h-2 rounded-full transition-colors ${
+										index === activeIndex ? 'bg-pink-500' : 'bg-gray-600'
+									}`}
+									onClick={() => setActiveIndex(index)}
+								/>
+							))}
+						</div>
+					</div>
+				</div>
+			</section>
+
 			{/* Booking Form */}
 			<section className="px-4 py-20">
 				<div className="max-w-md mx-auto">
@@ -168,7 +236,7 @@ const SpaWebsite = () => {
 							<input
 								type="tel"
 								placeholder="Contact Number"
-								className="w-full p-3 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:border-pink-500"
+								className="w-ful</svg>l p-3 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:border-pink-500"
 							/>
 							<input
 								type="email"
@@ -202,7 +270,7 @@ const SpaWebsite = () => {
 				<div className="grid max-w-6xl grid-cols-1 gap-8 mx-auto md:grid-cols-3">
 					<div>
 						<img
-							src="/api/placeholder/150/150"
+							src="/images/logo.png"
 							alt="PSH Logo"
 							className="w-24 h-24 mb-4 rounded-full"
 						/>
@@ -260,32 +328,55 @@ const services = [
 		name: 'Swedish Massage',
 		description:
 			'Traditional oil massage for deep relaxation and improved circulation.',
-		image: '/images/swedish.jpg',
+		image: '/images/Massage.jpg',
 	},
 	{
 		name: 'Shiatsu Massage',
 		description:
 			'Japanese pressure point therapy to balance energy flow and reduce stress.',
+		image: '/images/Massage.jpg',
 	},
 	{
 		name: 'Hot Stone Therapy',
 		description:
 			'Premium hot stone massage with authentic Japanese techniques for ultimate relaxation.',
+		image: '/images/Massage.jpg',
 	},
 	{
 		name: 'Aromatherapy Session',
 		description:
 			'Custom blend of Japanese essential oils to elevate your massage experience.',
+		image: '/images/Massage.jpg',
 	},
 	{
 		name: 'Cherry Blossom Special',
 		description:
 			'Our signature treatment combining multiple techniques with sakura-infused products.',
+		image: '/images/Massage.jpg',
 	},
 	{
 		name: 'Couples Experience',
 		description:
 			'Share the healing journey with a partner in our specially designed suite.',
+		image: '/images/Massage.jpg',
+	},
+];
+
+const testimonials = [
+	{
+		name: 'Sarah Johnson',
+		quote:
+			"The Japanese massage techniques used here are truly authentic. I've never felt more relaxed and rejuvenated. The attention to detail and the peaceful ambiance make every visit special.",
+	},
+	{
+		name: 'John Tanaka',
+		quote:
+			'The hot stone therapy is a must-try! The combination of heat and pressure is incredibly soothing. I always leave feeling refreshed and energized.',
+	},
+	{
+		name: 'Emily Chen',
+		quote:
+			'The treatment rooms are beautifully designed and the therapists are highly skilled. I love the attention to detail and the personalized service.',
 	},
 ];
 
