@@ -252,6 +252,25 @@ const SpaWebsite = () => {
           </div>
         </div>
       </section>
+				<div className="max-w-4xl mx-auto overflow-hidden">
+					<div className="relative">
+						<div className="flex transition-transform duration-300 ease-in-out">
+							{testimonials.map((testimonial, index) => (
+								<div
+									key={index}
+									className="w-full flex-shrink-0 px-8 py-10 bg-black rounded-lg"
+									style={{
+										transform: `translateX(-${activeIndex * 100}%)`,
+										transition: 'transform 0.7s ease-in-out',
+									}}>
+									<svg
+										className="absolute text-pink-500/10 right-4 top-4"
+										width="120"
+										height="120"
+										viewBox="0 0 24 24"
+										fill="currentColor">
+										<path d="M11.192 15.757c0-.88-.23-1.618-.69-2.217-.326-.412-.768-.683-1.327-.812-.55-.128-1.07-.137-1.54-.028-.16-.95.1-1.956.76-3.022.66-1.065 1.515-1.867 2.558-2.403L9.373 5c-.8.396-1.56.898-2.26 1.505-.71.607-1.34 1.305-1.9 2.094s-.98 1.68-1.25 2.69-.346 2.04-.217 3.1c.168 1.4.62 2.52 1.356 3.35.735.84 1.652 1.26 2.748 1.26.965 0 1.766-.29 2.4-.878.628-.576.94-1.365.94-2.368l.002.003zm9.124 0c0-.88-.23-1.618-.69-2.217-.326-.42-.77-.692-1.327-.817-.56-.124-1.074-.13-1.54-.022-.16-.94.09-1.95.75-3.02.66-1.06 1.514-1.86 2.557-2.4L18.49 5c-.8.396-1.555.898-2.26 1.505-.708.607-1.34 1.305-1.894 2.094-.556.79-.97 1.68-1.24 2.69-.273 1-.345 2.04-.217 3.1.168 1.4.62 2.52 1.356 3.35.735.84 1.652 1.26 2.748 1.26.965 0 1.766-.29 2.4-.878.628-.576.94-1.365.94-2.368l.002.003z" />
+									</svg>
 
       {/* Testimonial Carousel */}
       <section className="px-4 py-20 bg-gray-900">
@@ -299,6 +318,63 @@ const SpaWebsite = () => {
                 </div>
               ))}
             </div>
+            
+			{/* Booking Form and Map */}
+			<section className="px-4 py-20">
+				<div className="grid max-w-6xl grid-cols-1 gap-8 mx-auto md:grid-cols-2">
+					<div>
+						<h2 className="mb-8 font-serif text-3xl text-center">
+							Book Your Session
+						</h2>
+						<form className="space-y-6">
+							<div className="space-y-4">
+								<input
+									type="text"
+									placeholder="Full Name"
+									className="w-full p-3 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:border-pink-500"
+								/>
+								<input
+									type="tel"
+									placeholder="Contact Number"
+									className="w-full p-3 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:border-pink-500"
+								/>
+								<input
+									type="email"
+									placeholder="Email Address"
+									className="w-full p-3 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:border-pink-500"
+								/>
+								<select className="w-full p-3 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:border-pink-500">
+									<option value="">Select Treatment</option>
+									<option value="swedish">Swedish Massage</option>
+									<option value="shiatsu">Shiatsu Massage</option>
+									<option value="hotstone">Hot Stone Therapy</option>
+									<option value="signature">
+										Signature Cherry Blossom Experience
+									</option>
+								</select>
+								<textarea
+									placeholder="Any special requests or notes?"
+									rows={4}
+									className="w-full p-3 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:border-pink-500"
+								/>
+							</div>
+							<button className="w-full py-3 text-white transition bg-pink-500 rounded-lg hover:bg-pink-600">
+								Book Now
+							</button>
+						</form>
+					</div>
+					<div className="w-full h-full min-h-[400px] rounded-lg overflow-hidden">
+						<iframe
+							src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d331823.7402851301!2d120.66378321651236!3d14.566305186929052!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3397c9abc24f9f85%3A0xd920d66f8809d165!2s7829%20Makati%20Ave%2C%20Makati%2C%20Metro%20Manila!5e1!3m2!1sen!2sph!4v1739808185273!5m2!1sen!2sph"
+							width="600"
+							height="450"
+							style={{ border: 0 }}
+							allowFullScreen=""
+							loading="lazy"
+							referrerPolicy="no-referrer-when-downgrade"></iframe>
+					</div>
+				</div>
+			</section>
 
             {/* Carousel Indicators */}
             <div className="flex justify-center mt-6 space-x-2">
