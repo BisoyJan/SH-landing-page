@@ -7,6 +7,13 @@ const SpaWebsite = () => {
 	const [activeIndex, setActiveIndex] = React.useState(0);
 	const [isMenuOpen, setIsMenuOpen] = useState(false);
 
+	React.useEffect(() => {
+		const interval = setInterval(() => {
+			setActiveIndex((prevIndex) => (prevIndex + 1) % testimonials.length);
+		}, 6000); // Change slide every 3 seconds
+		return () => clearInterval(interval);
+	}, []);
+
 	const scrollToSection = (id) => {
 		document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
 		setIsMenuOpen(false); // Close the menu after clicking a link
@@ -92,12 +99,17 @@ const SpaWebsite = () => {
 			</header>
 
 			{/* Hero Section */}
-			<div className="relative h-screen">
+			<div className="relative h-screen md:h-[calc(100vh-64px)]">
 				<div className="absolute inset-0 bg-black/70">
+					<img
+						src="/images/bg-mobile.jpg"
+						alt="Spa treatment room with cherry blossoms"
+						className="object-cover w-full h-full opacity-30 md:hidden"
+					/>
 					<img
 						src="/images/bg.jpg"
 						alt="Spa treatment room with cherry blossoms"
-						className="object-cover w-full h-full opacity-30"
+						className="object-cover w-full h-full opacity-30 hidden md:block"
 					/>
 				</div>
 				<div className="absolute inset-0 flex flex-col items-center justify-center p-4 text-center">
@@ -106,13 +118,13 @@ const SpaWebsite = () => {
 						alt="PSH Logo"
 						className="w-32 h-32 mb-8 rounded-full"
 					/>
-					<h1 className="mb-6 font-serif tracking-wide text-7xl">
+					<h1 className="mb-6 font-serif tracking-wide text-5xl md:text-7xl">
 						Pure Sakura Healing
 					</h1>
-					<h2 className="mb-10 font-serif text-4xl text-pink-300">
+					<h2 className="mb-10 font-serif text-3xl md:text-4xl text-pink-300">
 						Japanese Wellness Spa
 					</h2>
-					<p className="max-w-3xl mx-auto mb-10 text-2xl leading-relaxed">
+					<p className="max-w-3xl mx-auto mb-10 text-xl md:text-2xl leading-relaxed">
 						Experience authentic Japanese{' '}
 						<span className="relative group">
 							<span className="underline cursor-pointer">OMOTENASHI</span>
@@ -166,11 +178,11 @@ const SpaWebsite = () => {
 					Signature Hot Stone Therapy
 				</h2>
 				<div className="max-w-6xl mx-auto">
-					<div className="grid grid-cols-1 gap-8 md:grid-cols-2">
+					<div className="grid grid-cols-1 gap-8 md:grid-cols-2 aling-items-center">
 						<img
-							src="/api/placeholder/600/400"
+							src="/images/massage/Hot Stone (1) (Small).jpg"
 							alt="Hot stone therapy treatment"
-							className="object-cover w-full rounded-lg h-80"
+							className="object-cover w-auto rounded-lg h-auto"
 						/>
 						<div className="flex flex-col justify-center">
 							<h3 className="mb-4 font-serif text-2xl">
@@ -250,15 +262,15 @@ const SpaWebsite = () => {
 
 				<div className="max-w-4xl mx-auto overflow-hidden">
 					<div className="relative">
-						<div className="flex transition-transform duration-700 ease-in-out">
+						<div
+							className="flex transition-transform duration-1000 ease-in-out"
+							style={{
+								transform: `translateX(-${activeIndex * 100}%)`,
+							}}>
 							{testimonials.map((testimonial, index) => (
 								<div
 									key={index}
-									className="flex-shrink-0 w-full px-8 py-10 bg-black rounded-lg"
-									style={{
-										transform: `translateX(-${activeIndex * 100}%)`,
-										transition: 'transform 0.7s ease-in-out',
-									}}>
+									className="flex-shrink-0 w-full px-8 py-10 bg-black rounded-lg">
 									<svg
 										className="absolute text-pink-500/10 right-4 top-4"
 										width="120"
