@@ -6,17 +6,129 @@ import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
 const SpaWebsite = () => {
 	const [activeIndex, setActiveIndex] = React.useState(0);
 	const [isMenuOpen, setIsMenuOpen] = useState(false);
+	const [formData, setFormData] = useState({
+		fullName: '',
+		contactNumber: '',
+		email: '',
+		treatment: '',
+		notes: ''
+	});
+	const [formErrors, setFormErrors] = useState({});
+	const [isSubmitting, setIsSubmitting] = useState(false);
+	const [submitSuccess, setSubmitSuccess] = useState(false);
+	const [submitError, setSubmitError] = useState('');
 
 	React.useEffect(() => {
 		const interval = setInterval(() => {
 			setActiveIndex((prevIndex) => (prevIndex + 1) % testimonials.length);
-		}, 6000); // Change slide every 3 seconds
+		}, 6000); // Change slide every 6 seconds
 		return () => clearInterval(interval);
 	}, []);
 
 	const scrollToSection = (id) => {
 		document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
 		setIsMenuOpen(false); // Close the menu after clicking a link
+	};
+
+	// Handle form input changes
+	const handleInputChange = (e) => {
+		const { name, value } = e.target;
+		setFormData({
+			...formData,
+			[name]: value
+		});
+		// Clear error for this field when user starts typing
+		if (formErrors[name]) {
+			setFormErrors({
+				...formErrors,
+				[name]: ''
+			});
+		}
+	};
+
+	// Validate form data
+	const validateForm = () => {
+		const errors = {};
+		// Full name validation
+		if (!formData.fullName.trim()) {
+			errors.fullName = 'Full name is required';
+		}
+
+		// Contact number validation
+		if (!formData.contactNumber.trim()) {
+			errors.contactNumber = 'Contact number is required';
+		} else if (!/^\+?[\d\s-]{7,15}$/.test(formData.contactNumber)) {
+			errors.contactNumber = 'Please enter a valid contact number';
+		}
+
+		// Email validation
+		if (!formData.email.trim()) {
+			errors.email = 'Email address is required';
+		} else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+			errors.email = 'Please enter a valid email address';
+		}
+
+		// Treatment validation
+		if (!formData.treatment) {
+			errors.treatment = 'Please select a treatment';
+		}
+
+		return errors;
+	};
+
+	// Handle form submission
+	const handleSubmit = async (e) => {
+		e.preventDefault();
+		
+		// Validate form
+		const errors = validateForm();
+		if (Object.keys(errors).length > 0) {
+			setFormErrors(errors);
+			return;
+		}
+
+		// Form is valid, proceed with submission
+		setIsSubmitting(true);
+		setSubmitError('');
+		setSubmitSuccess(false);
+
+		try {
+			// Simulating an API call
+			// In a real application, replace this with your actual API endpoint
+			// const response = await fetch('/api/booking', {
+			//   method: 'POST',
+			//   headers: {
+			//     'Content-Type': 'application/json',
+			//   },
+			//   body: JSON.stringify(formData),
+			// });
+
+			// For demo purposes, we'll simulate the response
+			await new Promise(resolve => setTimeout(resolve, 1500));
+			const response = { ok: true }; // Simulate successful response
+
+			if (response.ok) {
+				// Successfully submitted
+				setSubmitSuccess(true);
+				// Reset form
+				setFormData({
+					fullName: '',
+					contactNumber: '',
+					email: '',
+					treatment: '',
+					notes: ''
+				});
+			} else {
+				// Server returned an error
+				setSubmitError('Failed to submit booking. Please try again later.');
+			}
+		} catch (error) {
+			// Network or other error
+			setSubmitError('An error occurred. Please check your connection and try again.');
+			console.error('Booking submission error:', error);
+		} finally {
+			setIsSubmitting(false);
+		}
 	};
 
 	return (
@@ -98,33 +210,39 @@ const SpaWebsite = () => {
 				)}
 			</header>
 
-			{/* Hero Section */}
+			{/* Hero Section - Enhanced responsive background implementation */}
 			<div className="relative h-screen md:h-[calc(100vh-64px)]">
+				{/* Background for all devices with picture element for better responsiveness */}
 				<div className="absolute inset-0 bg-black/70">
-					<img
-						src="/images/bg-mobile.jpg"
-						alt="Spa treatment room with cherry blossoms"
-						className="object-cover w-full h-full opacity-30 md:hidden"
-					/>
-					<img
-						src="/images/bg.jpg"
-						alt="Spa treatment room with cherry blossoms"
-						className="object-cover w-full h-full opacity-30 hidden md:block"
-					/>
+					<picture>
+						{/* Mobile-specific background image */}
+						<source media="(max-width: 767px)" srcSet="/images/bg-mobile.jpg" />
+						{/* Tablet-specific background image (optional) */}
+						<source media="(max-width: 1023px)" srcSet="/images/bg-tablet.jpg" />
+						{/* Desktop background image */}
+						<source media="(min-width: 1024px)" srcSet="/images/bg.jpg" />
+						{/* Fallback image */}
+						<img
+							src="/images/bg.jpg"
+							alt="Spa treatment room with cherry blossoms"
+							className="object-cover object-center w-full h-full opacity-30"
+						/>
+					</picture>
 				</div>
 				<div className="absolute inset-0 flex flex-col items-center justify-center p-4 text-center">
+					{/* Logo now hidden on mobile screens, visible on medium screens and up */}
 					<img
 						src="/images/logo.png"
 						alt="PSH Logo"
-						className="w-32 h-32 mb-8 rounded-full"
+						className="hidden w-32 h-32 mb-8 rounded-full md:block"
 					/>
-					<h1 className="mb-6 font-serif tracking-wide text-5xl md:text-6xl">
+					<h1 className="mb-6 font-serif text-5xl tracking-wide md:text-6xl">
 						Pure Sakura Healing
 					</h1>
-					<h2 className="mb-10 font-serif text-3xl md:text-4xl text-pink-300">
+					<h2 className="mb-10 font-serif text-3xl text-pink-300 md:text-4xl">
 						Japanese Wellness Spa
 					</h2>
-					<p className="max-w-3xl mx-auto mb-10 text-l md:text-xl leading-relaxed">
+					<p className="max-w-3xl mx-auto mb-10 leading-relaxed text-l md:text-xl">
 						Experience authentic Japanese{' '}
 						<span className="relative group">
 							<span className="underline cursor-pointer">OMOTENASHI</span>
@@ -174,17 +292,17 @@ const SpaWebsite = () => {
 				</div>
 			</section>
 
-			{/* Hot Stone Therapy Feature */}
+			{/* Hot Stone Therapy Feature - Improved mobile layout */}
 			<section id="about" className="px-4 py-20">
 				<h2 className="mb-16 font-serif text-3xl text-center">
 					Signature Hot Stone Therapy
 				</h2>
 				<div className="max-w-6xl mx-auto">
-					<div className="grid grid-cols-1 gap-8 md:grid-cols-2 aling-items-center">
+					<div className="grid items-center grid-cols-1 gap-8 md:grid-cols-2">
 						<img
 							src="/images/massage/Hot Stone (1) (Small).jpg"
 							alt="Hot stone therapy treatment"
-							className="object-cover w-auto rounded-lg h-auto"
+							className="object-cover w-full h-auto mx-auto rounded-lg"
 						/>
 						<div className="flex flex-col justify-center">
 							<h3 className="mb-4 font-serif text-2xl">
@@ -216,32 +334,32 @@ const SpaWebsite = () => {
 				</div>
 			</section>
 
-			{/* Treatment Room Gallery */}
+			{/* Treatment Room Gallery - Improved for mobile */}
 			<section className="px-4 py-20 bg-gray-900">
 				<h2 className="mb-16 font-serif text-3xl text-center">
 					Our Wellness Space
 				</h2>
 				<div className="max-w-6xl mx-auto">
-					<div className="grid grid-cols-1 gap-6 md:grid-cols-3">
+					<div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3">
 						<div className="overflow-hidden rounded-lg">
 							<img
 								src="/images/massage/IMG_3164.jpg"
 								alt="Treatment room with cherry blossoms"
-								className="object-cover w-full transition duration-500 h-80 hover:scale-105"
+								className="object-cover w-full h-64 transition duration-500 md:h-80 hover:scale-105"
 							/>
 						</div>
 						<div className="overflow-hidden rounded-lg">
 							<img
 								src="/images/massage/IMG_3179.jpg"
 								alt="Hot stone treatment setup"
-								className="object-cover w-full transition duration-500 h-80 hover:scale-105"
+								className="object-cover w-full h-64 transition duration-500 md:h-80 hover:scale-105"
 							/>
 						</div>
-						<div className="overflow-hidden rounded-lg">
+						<div className="overflow-hidden rounded-lg sm:col-span-2 md:col-span-1">
 							<img
 								src="/images/massage/IMG_3191.jpg"
 								alt="Spa treatment area"
-								className="object-cover w-full transition duration-500 h-80 hover:scale-105"
+								className="object-cover w-full h-64 transition duration-500 md:h-80 hover:scale-105"
 							/>
 						</div>
 					</div>
@@ -256,20 +374,21 @@ const SpaWebsite = () => {
 				</div>
 			</section>
 
-			{/* Show Casing */}
-			<section className="px-4 py-20 ">
+			{/* Show Casing - Made responsive */}
+			<section className="px-4 py-20">
 				<h2 className="mb-12 font-serif text-3xl text-center">
-					Dont know yet what title should I put
+					Experience Our Sanctuary
 				</h2>
 				<div className="flex justify-center mt-10">
 					<video
 						src="/images/massage/Show casing the place.mp4"
 						className="w-full max-w-4xl rounded-lg"
-						controls></video>
+						controls
+						preload="metadata"></video>
 				</div>
 			</section>
 
-			{/* Testimonial Carousel */}
+			{/* Testimonial Carousel - Made more mobile friendly */}
 			<section className="px-4 py-20 bg-gray-900">
 				<h2 className="mb-16 font-serif text-3xl text-center">
 					Client Testimonials
@@ -285,18 +404,18 @@ const SpaWebsite = () => {
 							{testimonials.map((testimonial, index) => (
 								<div
 									key={index}
-									className="flex-shrink-0 w-full px-8 py-10 bg-black rounded-lg">
+									className="flex-shrink-0 w-full px-4 py-8 bg-black rounded-lg sm:px-8 sm:py-10">
 									<svg
 										className="absolute text-pink-500/10 right-4 top-4"
-										width="120"
-										height="120"
+										width="80"
+										height="80"
 										viewBox="0 0 24 24"
 										fill="currentColor">
 										<path d="M11.192 15.757c0-.88-.23-1.618-.69-2.217-.326-.412-.768-.683-1.327-.812-.55-.128-1.07-.137-1.54-.028-.16-.95.1-1.956.76-3.022.66-1.065 1.515-1.867 2.558-2.403L9.373 5c-.8.396-1.56.898-2.26 1.505-.71.607-1.34 1.305-1.9 2.094s-.98 1.68-1.25 2.69-.346 2.04-.217 3.1c.168 1.4.62 2.52 1.356 3.35.735.84 1.652 1.26 2.748 1.26.965 0 1.766-.29 2.4-.878.628-.576.94-1.365.94-2.368l.002.003zm9.124 0c0-.88-.23-1.618-.69-2.217-.326-.42-.77-.692-1.327-.817-.56-.124-1.074-.13-1.54-.022-.16-.94.09-1.95.75-3.02.66-1.06 1.514-1.86 2.557-2.4L18.49 5c-.8.396-1.555.898-2.26 1.505-.708.607-1.34 1.305-1.894 2.094-.556.79-.97 1.68-1.24 2.69-.273 1-.345 2.04-.217 3.1.168 1.4.62 2.52 1.356 3.35.735.84 1.652 1.26 2.748 1.26.965 0 1.766-.29 2.4-.878.628-.576.94-1.365.94-2.368l.002.003z" />
 									</svg>
 
 									<blockquote className="relative">
-										<p className="text-lg text-gray-200">{testimonial.quote}</p>
+										<p className="text-base text-gray-200 sm:text-lg">{testimonial.quote}</p>
 										<footer className="mt-6">
 											<div className="flex items-center">
 												<div className="ml-4">
@@ -330,55 +449,140 @@ const SpaWebsite = () => {
 				</div>
 			</section>
 
-			{/* Booking Form and Map */}
-			<section className="px-4 py-20">
+			{/* Booking Form and Map - Improved with form validation and handling */}
+			<section id="booking" className="px-4 py-20">
 				<div className="grid max-w-6xl grid-cols-1 gap-8 mx-auto md:grid-cols-2">
 					<div>
 						<h2 className="mb-8 font-serif text-3xl text-center">
 							Book Your Session
 						</h2>
-						<form className="space-y-6">
-							<div className="space-y-4">
-								<input
-									type="text"
-									placeholder="Full Name"
-									className="w-full p-3 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:border-pink-500"
-								/>
-								<input
-									type="tel"
-									placeholder="Contact Number"
-									className="w-full p-3 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:border-pink-500"
-								/>
-								<input
-									type="email"
-									placeholder="Email Address"
-									className="w-full p-3 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:border-pink-500"
-								/>
-								<select className="w-full p-3 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:border-pink-500">
-									<option value="">Select Treatment</option>
-									<option value="swedish">Swedish Massage</option>
-									<option value="shiatsu">Shiatsu Massage</option>
-									<option value="hotstone">Hot Stone Therapy</option>
-									<option value="signature">
-										Signature Cherry Blossom Experience
-									</option>
-								</select>
-								<textarea
-									placeholder="Any special requests or notes?"
-									rows={4}
-									className="w-full p-3 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:border-pink-500"
-								/>
+						{submitSuccess ? (
+							<div className="p-6 text-center border border-green-500 rounded-lg bg-green-900/30">
+								<svg className="w-12 h-12 mx-auto mb-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+									<path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
+								</svg>
+								<h3 className="mb-2 font-serif text-xl text-white">Booking Successful!</h3>
+								<p className="mb-4 text-gray-300">Thank you for booking your session. We will contact you soon to confirm your appointment.</p>
+								<button 
+									onClick={() => setSubmitSuccess(false)}
+									className="px-6 py-2 text-white transition bg-pink-500 rounded-lg hover:bg-pink-600">
+									Book Another Session
+								</button>
 							</div>
-							<button className="w-full py-3 text-white transition bg-pink-500 rounded-lg hover:bg-pink-600">
-								Book Now
-							</button>
-						</form>
+						) : (
+							<form onSubmit={handleSubmit} className="space-y-6">
+								<div className="space-y-4">
+									<div>
+										<input
+											type="text"
+											name="fullName"
+											value={formData.fullName}
+											onChange={handleInputChange}
+											placeholder="Full Name"
+											className={`w-full p-3 bg-gray-800 border rounded-lg focus:outline-none focus:border-pink-500 ${
+												formErrors.fullName ? 'border-red-500' : 'border-gray-700'
+											}`}
+										/>
+										{formErrors.fullName && (
+											<p className="mt-1 text-sm text-red-500">{formErrors.fullName}</p>
+										)}
+									</div>
+									
+									<div>
+										<input
+											type="tel"
+											name="contactNumber"
+											value={formData.contactNumber}
+											onChange={handleInputChange}
+											placeholder="Contact Number"
+											className={`w-full p-3 bg-gray-800 border rounded-lg focus:outline-none focus:border-pink-500 ${
+												formErrors.contactNumber ? 'border-red-500' : 'border-gray-700'
+											}`}
+										/>
+										{formErrors.contactNumber && (
+											<p className="mt-1 text-sm text-red-500">{formErrors.contactNumber}</p>
+										)}
+									</div>
+									
+									<div>
+										<input
+											type="email"
+											name="email"
+											value={formData.email}
+											onChange={handleInputChange}
+											placeholder="Email Address"
+											className={`w-full p-3 bg-gray-800 border rounded-lg focus:outline-none focus:border-pink-500 ${
+												formErrors.email ? 'border-red-500' : 'border-gray-700'
+											}`}
+										/>
+										{formErrors.email && (
+											<p className="mt-1 text-sm text-red-500">{formErrors.email}</p>
+										)}
+									</div>
+									
+									<div>
+										<select
+											name="treatment"
+											value={formData.treatment}
+											onChange={handleInputChange}
+											className={`w-full p-3 bg-gray-800 border rounded-lg focus:outline-none focus:border-pink-500 ${
+												formErrors.treatment ? 'border-red-500' : 'border-gray-700'
+											}`}
+										>
+											<option value="">Select Treatment</option>
+											<option value="swedish">Swedish Massage</option>
+											<option value="shiatsu">Shiatsu Massage</option>
+											<option value="hotstone">Hot Stone Therapy</option>
+											<option value="signature">
+												Signature Cherry Blossom Experience
+											</option>
+										</select>
+										{formErrors.treatment && (
+											<p className="mt-1 text-sm text-red-500">{formErrors.treatment}</p>
+										)}
+									</div>
+									
+									<textarea
+										name="notes"
+										value={formData.notes}
+										onChange={handleInputChange}
+										placeholder="Any special requests or notes?"
+										rows={4}
+										className="w-full p-3 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:border-pink-500"
+									/>
+								</div>
+								
+								{submitError && (
+									<div className="p-3 text-red-200 border border-red-500 rounded-lg bg-red-900/30">
+										{submitError}
+									</div>
+								)}
+								
+								<button 
+									type="submit" 
+									disabled={isSubmitting}
+									className="w-full py-3 text-white transition bg-pink-500 rounded-lg hover:bg-pink-600 disabled:bg-pink-500/50 disabled:cursor-not-allowed"
+								>
+									{isSubmitting ? (
+										<span className="flex items-center justify-center">
+											<svg className="w-5 h-5 mr-2 animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+												<circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+												<path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+											</svg>
+											Processing...
+										</span>
+									) : (
+										'Book Now'
+									)}
+								</button>
+							</form>
+						)}
 					</div>
-					<div className="w-full h-full min-h-[400px] rounded-lg overflow-hidden">
+					<div className="w-full h-full min-h-[300px] md:min-h-[400px] rounded-lg overflow-hidden">
 						<iframe
 							src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d331823.7402851301!2d120.66378321651236!3d14.566305186929052!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3397c9abc24f9f85%3A0xd920d66f8809d165!2s7829%20Makati%20Ave%2C%20Makati%2C%20Metro%20Manila!5e1!3m2!1sen!2sph!4v1739808185273!5m2!1sen!2sph"
-							width="600"
-							height="450"
+							width="100%"
+							height="100%"
 							style={{ border: 0 }}
 							allowFullScreen=""
 							loading="lazy"
@@ -387,23 +591,23 @@ const SpaWebsite = () => {
 				</div>
 			</section>
 
-			{/* Footer */}
+			{/* Footer - Improved mobile layout */}
 			<footer
 				id="contact"
 				className="px-4 py-12 bg-black border-t border-gray-800">
 				<div className="grid max-w-6xl grid-cols-1 gap-8 mx-auto md:grid-cols-3">
-					<div>
+					<div className="text-center md:text-left">
 						<img
 							src="/images/logo.png"
 							alt="PSH Logo"
-							className="w-24 h-24 mb-4 rounded-full"
+							className="w-24 h-24 mx-auto mb-4 rounded-full md:mx-0"
 						/>
 						<p className="text-gray-400">
 							Experience authentic Japanese wellness and healing traditions in a
 							serene environment.
 						</p>
 					</div>
-					<div>
+					<div className="text-center md:text-left">
 						<h3 className="mb-4 font-serif text-xl">Contact</h3>
 						<ul className="space-y-2 text-gray-400">
 							<li>Email: info@puresakurahealing.com</li>
@@ -418,9 +622,9 @@ const SpaWebsite = () => {
 							</li>
 						</ul>
 					</div>
-					<div>
+					<div className="text-center md:text-left">
 						<h3 className="mb-4 font-serif text-xl">Follow Us</h3>
-						<div className="flex mb-6 space-x-4">
+						<div className="flex justify-center mb-6 space-x-4 md:justify-start">
 							<a
 								href="#"
 								className="text-gray-400 transition hover:text-pink-500">
