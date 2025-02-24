@@ -118,13 +118,13 @@ const SpaWebsite = () => {
 						alt="PSH Logo"
 						className="w-32 h-32 mb-8 rounded-full"
 					/>
-					<h1 className="mb-6 font-serif tracking-wide text-5xl md:text-7xl">
+					<h1 className="mb-6 font-serif tracking-wide text-5xl md:text-6xl">
 						Pure Sakura Healing
 					</h1>
 					<h2 className="mb-10 font-serif text-3xl md:text-4xl text-pink-300">
 						Japanese Wellness Spa
 					</h2>
-					<p className="max-w-3xl mx-auto mb-10 text-xl md:text-2xl leading-relaxed">
+					<p className="max-w-3xl mx-auto mb-10 text-l md:text-xl leading-relaxed">
 						Experience authentic Japanese{' '}
 						<span className="relative group">
 							<span className="underline cursor-pointer">OMOTENASHI</span>
@@ -144,6 +144,8 @@ const SpaWebsite = () => {
 					</button>
 				</div>
 			</div>
+
+			<section id=""></section>
 
 			{/* Services Section */}
 			<section id="services" className="px-4 py-20 bg-gray-900">
@@ -223,21 +225,21 @@ const SpaWebsite = () => {
 					<div className="grid grid-cols-1 gap-6 md:grid-cols-3">
 						<div className="overflow-hidden rounded-lg">
 							<img
-								src="/api/placeholder/400/600"
+								src="/images/massage/IMG_3164.jpg"
 								alt="Treatment room with cherry blossoms"
 								className="object-cover w-full transition duration-500 h-80 hover:scale-105"
 							/>
 						</div>
 						<div className="overflow-hidden rounded-lg">
 							<img
-								src="/api/placeholder/400/600"
+								src="/images/massage/IMG_3179.jpg"
 								alt="Hot stone treatment setup"
 								className="object-cover w-full transition duration-500 h-80 hover:scale-105"
 							/>
 						</div>
 						<div className="overflow-hidden rounded-lg">
 							<img
-								src="/api/placeholder/400/600"
+								src="/images/massage/IMG_3191.jpg"
 								alt="Spa treatment area"
 								className="object-cover w-full transition duration-500 h-80 hover:scale-105"
 							/>
@@ -251,6 +253,19 @@ const SpaWebsite = () => {
 							gardens of Japan.
 						</p>
 					</div>
+				</div>
+			</section>
+
+			{/* Show Casing */}
+			<section className="px-4 py-20 ">
+				<h2 className="mb-12 font-serif text-3xl text-center">
+					Dont know yet what title should I put
+				</h2>
+				<div className="flex justify-center mt-10">
+					<video
+						src="/images/massage/Show casing the place.mp4"
+						className="w-full max-w-4xl rounded-lg"
+						controls></video>
 				</div>
 			</section>
 
@@ -443,19 +458,19 @@ const services = [
 		name: 'Swedish Massage',
 		description:
 			'Traditional oil massage for deep relaxation and improved circulation.',
-		image: '/images/Massage.jpg',
+		image: '/images/Massage/SWEDISH (1).jpg',
 	},
 	{
 		name: 'Shiatsu Massage',
 		description:
 			'Japanese pressure point therapy to balance energy flow and reduce stress.',
-		image: '/images/Massage.jpg',
+		image: '/images/Massage/SHIATSU (2).jpg',
 	},
 	{
 		name: 'Hot Stone Therapy',
 		description:
 			'Premium hot stone massage with authentic Japanese techniques for ultimate relaxation.',
-		image: '/images/Massage.jpg',
+		image: '/images/Massage/Hot Stone (1).jpg',
 	},
 	{
 		name: 'Aromatherapy Session',
