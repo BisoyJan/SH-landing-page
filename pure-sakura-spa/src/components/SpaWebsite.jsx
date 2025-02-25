@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
+import { useEffect, useRef } from 'react';
 
 const SpaWebsite = () => {
 	const [activeIndex, setActiveIndex] = React.useState(0);
@@ -11,12 +12,14 @@ const SpaWebsite = () => {
 		contactNumber: '',
 		email: '',
 		treatment: '',
-		notes: ''
+		notes: '',
 	});
 	const [formErrors, setFormErrors] = useState({});
 	const [isSubmitting, setIsSubmitting] = useState(false);
 	const [submitSuccess, setSubmitSuccess] = useState(false);
 	const [submitError, setSubmitError] = useState('');
+
+	const servicesRef = useRef(null);
 
 	React.useEffect(() => {
 		const interval = setInterval(() => {
@@ -35,13 +38,13 @@ const SpaWebsite = () => {
 		const { name, value } = e.target;
 		setFormData({
 			...formData,
-			[name]: value
+			[name]: value,
 		});
 		// Clear error for this field when user starts typing
 		if (formErrors[name]) {
 			setFormErrors({
 				...formErrors,
-				[name]: ''
+				[name]: '',
 			});
 		}
 	};
@@ -79,7 +82,7 @@ const SpaWebsite = () => {
 	// Handle form submission
 	const handleSubmit = async (e) => {
 		e.preventDefault();
-		
+
 		// Validate form
 		const errors = validateForm();
 		if (Object.keys(errors).length > 0) {
@@ -104,7 +107,7 @@ const SpaWebsite = () => {
 			// });
 
 			// For demo purposes, we'll simulate the response
-			await new Promise(resolve => setTimeout(resolve, 1500));
+			await new Promise((resolve) => setTimeout(resolve, 1500));
 			const response = { ok: true }; // Simulate successful response
 
 			if (response.ok) {
@@ -116,7 +119,7 @@ const SpaWebsite = () => {
 					contactNumber: '',
 					email: '',
 					treatment: '',
-					notes: ''
+					notes: '',
 				});
 			} else {
 				// Server returned an error
@@ -124,12 +127,58 @@ const SpaWebsite = () => {
 			}
 		} catch (error) {
 			// Network or other error
-			setSubmitError('An error occurred. Please check your connection and try again.');
+			setSubmitError(
+				'An error occurred. Please check your connection and try again.'
+			);
 			console.error('Booking submission error:', error);
 		} finally {
 			setIsSubmitting(false);
 		}
 	};
+
+	useEffect(() => {
+		const options = {
+			root: null,
+			rootMargin: '0px',
+			threshold: 0.1,
+		};
+
+		const observerCallback = (entries, observer) => {
+			entries.forEach((entry, idx) => {
+				// If the element is in the viewport
+				if (entry.isIntersecting) {
+					// Add a delay based on the index to create a sequential animation
+					setTimeout(() => {
+						entry.target.classList.add('animate-in');
+					}, idx * 150);
+
+					// Once animated, no need to observe anymore
+					observer.unobserve(entry.target);
+				}
+			});
+		};
+
+		const observer = new IntersectionObserver(observerCallback, options);
+
+		// Get all service cards and observe them
+		if (servicesRef.current) {
+			const serviceCards =
+				servicesRef.current.querySelectorAll('.service-card');
+			serviceCards.forEach((card) => {
+				observer.observe(card);
+			});
+		}
+
+		return () => {
+			if (servicesRef.current) {
+				const serviceCards =
+					servicesRef.current.querySelectorAll('.service-card');
+				serviceCards.forEach((card) => {
+					observer.unobserve(card);
+				});
+			}
+		};
+	}, []);
 
 	return (
 		<div className="min-h-screen text-white bg-black">
@@ -218,7 +267,10 @@ const SpaWebsite = () => {
 						{/* Mobile-specific background image */}
 						<source media="(max-width: 767px)" srcSet="/images/bg-mobile.jpg" />
 						{/* Tablet-specific background image (optional) */}
-						<source media="(max-width: 1023px)" srcSet="/images/bg-tablet.jpg" />
+						<source
+							media="(max-width: 1023px)"
+							srcSet="/images/bg-tablet.jpg"
+						/>
 						{/* Desktop background image */}
 						<source media="(min-width: 1024px)" srcSet="/images/bg.jpg" />
 						{/* Fallback image */}
@@ -268,12 +320,16 @@ const SpaWebsite = () => {
 			{/* Services Section */}
 			<section id="services" className="px-4 py-20 bg-gray-900">
 				<div className="max-w-6xl mx-auto">
-					<h2 className="mb-16 font-serif text-3xl text-center">
+					<h2 className="mb-16 font-serif text-3xl text-center text-white">
 						Our Massage Services
 					</h2>
-					<div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+					<div
+						ref={servicesRef}
+						className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
 						{services.map((service, index) => (
-							<div key={index} className="relative group">
+							<div
+								key={index}
+								className="relative group service-card opacity-0 transform translate-y-12 transition-all duration-1000 ease-out">
 								<img
 									src={service.image}
 									alt={service.name}
@@ -283,13 +339,23 @@ const SpaWebsite = () => {
 									}}
 								/>
 								<div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black">
-									<h3 className="mb-2 font-serif text-xl">{service.name}</h3>
+									<h3 className="mb-2 font-serif text-xl text-white">
+										{service.name}
+									</h3>
 									<p className="text-gray-300">{service.description}</p>
 								</div>
 							</div>
 						))}
 					</div>
 				</div>
+
+				{/* Add CSS for the animation */}
+				<style jsx>{`
+					.service-card.animate-in {
+						opacity: 1;
+						transform: translateY(0);
+					}
+				`}</style>
 			</section>
 
 			{/* Hot Stone Therapy Feature - Improved mobile layout */}
@@ -415,7 +481,9 @@ const SpaWebsite = () => {
 									</svg>
 
 									<blockquote className="relative">
-										<p className="text-base text-gray-200 sm:text-lg">{testimonial.quote}</p>
+										<p className="text-base text-gray-200 sm:text-lg">
+											{testimonial.quote}
+										</p>
 										<footer className="mt-6">
 											<div className="flex items-center">
 												<div className="ml-4">
@@ -458,12 +526,25 @@ const SpaWebsite = () => {
 						</h2>
 						{submitSuccess ? (
 							<div className="p-6 text-center border border-green-500 rounded-lg bg-green-900/30">
-								<svg className="w-12 h-12 mx-auto mb-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-									<path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
+								<svg
+									className="w-12 h-12 mx-auto mb-4 text-green-500"
+									fill="none"
+									stroke="currentColor"
+									viewBox="0 0 24 24">
+									<path
+										strokeLinecap="round"
+										strokeLinejoin="round"
+										strokeWidth="2"
+										d="M5 13l4 4L19 7"></path>
 								</svg>
-								<h3 className="mb-2 font-serif text-xl text-white">Booking Successful!</h3>
-								<p className="mb-4 text-gray-300">Thank you for booking your session. We will contact you soon to confirm your appointment.</p>
-								<button 
+								<h3 className="mb-2 font-serif text-xl text-white">
+									Booking Successful!
+								</h3>
+								<p className="mb-4 text-gray-300">
+									Thank you for booking your session. We will contact you soon
+									to confirm your appointment.
+								</p>
+								<button
 									onClick={() => setSubmitSuccess(false)}
 									className="px-6 py-2 text-white transition bg-pink-500 rounded-lg hover:bg-pink-600">
 									Book Another Session
@@ -480,14 +561,18 @@ const SpaWebsite = () => {
 											onChange={handleInputChange}
 											placeholder="Full Name"
 											className={`w-full p-3 bg-gray-800 border rounded-lg focus:outline-none focus:border-pink-500 ${
-												formErrors.fullName ? 'border-red-500' : 'border-gray-700'
+												formErrors.fullName
+													? 'border-red-500'
+													: 'border-gray-700'
 											}`}
 										/>
 										{formErrors.fullName && (
-											<p className="mt-1 text-sm text-red-500">{formErrors.fullName}</p>
+											<p className="mt-1 text-sm text-red-500">
+												{formErrors.fullName}
+											</p>
 										)}
 									</div>
-									
+
 									<div>
 										<input
 											type="tel"
@@ -496,14 +581,18 @@ const SpaWebsite = () => {
 											onChange={handleInputChange}
 											placeholder="Contact Number"
 											className={`w-full p-3 bg-gray-800 border rounded-lg focus:outline-none focus:border-pink-500 ${
-												formErrors.contactNumber ? 'border-red-500' : 'border-gray-700'
+												formErrors.contactNumber
+													? 'border-red-500'
+													: 'border-gray-700'
 											}`}
 										/>
 										{formErrors.contactNumber && (
-											<p className="mt-1 text-sm text-red-500">{formErrors.contactNumber}</p>
+											<p className="mt-1 text-sm text-red-500">
+												{formErrors.contactNumber}
+											</p>
 										)}
 									</div>
-									
+
 									<div>
 										<input
 											type="email"
@@ -516,19 +605,22 @@ const SpaWebsite = () => {
 											}`}
 										/>
 										{formErrors.email && (
-											<p className="mt-1 text-sm text-red-500">{formErrors.email}</p>
+											<p className="mt-1 text-sm text-red-500">
+												{formErrors.email}
+											</p>
 										)}
 									</div>
-									
+
 									<div>
 										<select
 											name="treatment"
 											value={formData.treatment}
 											onChange={handleInputChange}
 											className={`w-full p-3 bg-gray-800 border rounded-lg focus:outline-none focus:border-pink-500 ${
-												formErrors.treatment ? 'border-red-500' : 'border-gray-700'
-											}`}
-										>
+												formErrors.treatment
+													? 'border-red-500'
+													: 'border-gray-700'
+											}`}>
 											<option value="">Select Treatment</option>
 											<option value="swedish">Swedish Massage</option>
 											<option value="shiatsu">Shiatsu Massage</option>
@@ -538,10 +630,12 @@ const SpaWebsite = () => {
 											</option>
 										</select>
 										{formErrors.treatment && (
-											<p className="mt-1 text-sm text-red-500">{formErrors.treatment}</p>
+											<p className="mt-1 text-sm text-red-500">
+												{formErrors.treatment}
+											</p>
 										)}
 									</div>
-									
+
 									<textarea
 										name="notes"
 										value={formData.notes}
@@ -551,23 +645,35 @@ const SpaWebsite = () => {
 										className="w-full p-3 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:border-pink-500"
 									/>
 								</div>
-								
+
 								{submitError && (
 									<div className="p-3 text-red-200 border border-red-500 rounded-lg bg-red-900/30">
 										{submitError}
 									</div>
 								)}
-								
-								<button 
-									type="submit" 
+
+								<button
+									type="submit"
 									disabled={isSubmitting}
-									className="w-full py-3 text-white transition bg-pink-500 rounded-lg hover:bg-pink-600 disabled:bg-pink-500/50 disabled:cursor-not-allowed"
-								>
+									className="w-full py-3 text-white transition bg-pink-500 rounded-lg hover:bg-pink-600 disabled:bg-pink-500/50 disabled:cursor-not-allowed">
 									{isSubmitting ? (
 										<span className="flex items-center justify-center">
-											<svg className="w-5 h-5 mr-2 animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-												<circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-												<path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+											<svg
+												className="w-5 h-5 mr-2 animate-spin"
+												xmlns="http://www.w3.org/2000/svg"
+												fill="none"
+												viewBox="0 0 24 24">
+												<circle
+													className="opacity-25"
+													cx="12"
+													cy="12"
+													r="10"
+													stroke="currentColor"
+													strokeWidth="4"></circle>
+												<path
+													className="opacity-75"
+													fill="currentColor"
+													d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
 											</svg>
 											Processing...
 										</span>
@@ -677,22 +783,22 @@ const services = [
 		image: '/images/Massage/Hot Stone (1).jpg',
 	},
 	{
-		name: 'Aromatherapy Session',
+		name: 'Ventosa Massage',
 		description:
-			'Custom blend of Japanese essential oils to elevate your massage experience.',
-		image: '/images/Massage.jpg',
+			'Utilizes heated cups to create suction, providing muscle relief and enhancing blood flow.',
+		image: '/images/Massage/VENTOSA (1).jpg',
 	},
 	{
-		name: 'Cherry Blossom Special',
+		name: 'Special Signature',
 		description:
 			'Our signature treatment combining multiple techniques with sakura-infused products.',
-		image: '/images/Massage.jpg',
+		image: '/images/Massage/SPECIAL SIGNATURE.jpg',
 	},
 	{
-		name: 'Couples Experience',
+		name: 'Foot Massage',
 		description:
-			'Share the healing journey with a partner in our specially designed suite.',
-		image: '/images/Massage.jpg',
+			'Relieves tension and improves circulation through targeted pressure points.',
+		image: '/images/Massage/Foot Massage.jpg',
 	},
 ];
 
