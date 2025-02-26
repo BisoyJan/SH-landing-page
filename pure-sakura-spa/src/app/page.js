@@ -1,4 +1,4 @@
-import SpaWebsite from "../components/SpaWebsite";  // Adjust the path if needed
+import SpaWebsite from "../app/SpaWebsite";  // Adjust the path if needed
 
 export default function Home() {
   return (
