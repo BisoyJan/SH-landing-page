@@ -4,8 +4,6 @@ import React, { useState } from "react";
 import { useEffect, useRef } from "react";
 import Loader from "@/components/Loader";
 
-
-
 const SpaWebsite = () => {
   const [activeIndex, setActiveIndex] = React.useState(0);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -14,6 +12,8 @@ const SpaWebsite = () => {
     contactNumber: "",
     email: "",
     treatment: "",
+    date: "",
+    time: "",
     notes: "",
   });
   const [formErrors, setFormErrors] = useState({});
@@ -51,6 +51,21 @@ const SpaWebsite = () => {
     }
   };
 
+  // Generate time slots for the dropdown (3:00 PM to 12:00 AM in hourly increments)
+  const generateTimeSlots = () => {
+    const slots = [];
+    for (let hour = 15; hour <= 23; hour++) {
+      const startHour = hour % 12 === 0 ? 12 : hour % 12;
+      const endHour = (hour + 1) % 12 === 0 ? 12 : (hour + 1) % 12;
+      const amPmStart = hour >= 12 ? "PM" : "AM";
+      const amPmEnd = hour + 1 >= 12 ? "PM" : "AM";
+      slots.push(`${startHour}:00${amPmStart}-${endHour}:00${amPmEnd}`);
+    }
+    // Add the last slot (11:00 PM - 12:00 AM)
+    slots.push("11:00PM-12:00AM");
+    return slots;
+  };
+
   // Validate form data
   const validateForm = () => {
     const errors = {};
@@ -76,6 +91,16 @@ const SpaWebsite = () => {
     // Treatment validation
     if (!formData.treatment) {
       errors.treatment = "Please select a treatment";
+    }
+
+    // Date validation
+    if (!formData.date) {
+      errors.date = "Please select a date";
+    }
+
+    // Time validation
+    if (!formData.time) {
+      errors.time = "Please select a time slot";
     }
 
     return errors;
@@ -105,6 +130,8 @@ const SpaWebsite = () => {
           contactNumber: formData.contactNumber,
           emailAddress: formData.email,
           treatment: formData.treatment,
+          date: formData.date,
+          time: formData.time,
           specialRequests: formData.notes,
         }),
       });
@@ -118,6 +145,8 @@ const SpaWebsite = () => {
           contactNumber: "",
           email: "",
           treatment: "",
+          date: "",
+          time: "",
           notes: "",
         });
       } else {
@@ -517,212 +546,256 @@ const SpaWebsite = () => {
               ))}
             </div>
 
-			{/* Carousel Indicators */}
-						<div className="flex justify-center mt-6 space-x-2">
-						  {testimonials.map((_, index) => (
-							<button
-							  key={index}
-							  className={`w-2 h-2 rounded-full transition-colors ${
-								index === activeIndex ? "bg-pink-500" : "bg-gray-600"
-							  }`}
-							  onClick={() => setActiveIndex(index)}
-							/>
-						  ))}
-						</div>
-					  </div>
-					</div>
-				  </section>
+            {/* Carousel Indicators */}
+            <div className="flex justify-center mt-6 space-x-2">
+              {testimonials.map((_, index) => (
+                <button
+                  key={index}
+                  className={`w-2 h-2 rounded-full transition-colors ${
+                    index === activeIndex ? "bg-pink-500" : "bg-gray-600"
+                  }`}
+                  onClick={() => setActiveIndex(index)}
+                />
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
 
-				  {/* Booking Form and Map - Improved with form validation and handling */}
-				  <section id="booking" className="px-4 py-20">
-					<div className="grid max-w-6xl grid-cols-1 gap-8 mx-auto md:grid-cols-2">
-					  <div>
-						<h2 className="mb-8 font-serif text-3xl text-center">
-						  Book Your Session
-						</h2>
-						{submitSuccess ? (
-						  <div className="p-6 text-center border border-green-500 rounded-lg bg-green-900/30">
-							<svg
-							  className="w-12 h-12 mx-auto mb-4 text-green-500"
-							  fill="none"
-							  stroke="currentColor"
-							  viewBox="0 0 24 24"
-							>
-							  <path
-								strokeLinecap="round"
-								strokeLinejoin="round"
-								strokeWidth="2"
-								d="M5 13l4 4L19 7"
-							  ></path>
-							</svg>
-							<h3 className="mb-2 font-serif text-xl text-white">
-							  Booking Successful!
-							</h3>
-							<p className="mb-4 text-gray-300">
-							  Thank you for booking your session. We will contact you soon
-							  to confirm your appointment.
-							</p>
-							<button
-							  onClick={() => setSubmitSuccess(false)}
-							  className="px-6 py-2 text-white transition bg-pink-500 rounded-lg hover:bg-pink-600"
-							>
-							  Book Another Session
-							</button>
-						  </div>
-						) : (
-						  <form onSubmit={handleSubmit} className="space-y-6">
-							<div className="space-y-4">
-							  <div>
-								<input
-								  type="text"
-								  name="fullName"
-								  value={formData.fullName}
-								  onChange={handleInputChange}
-								  placeholder="Full Name"
-								  className={`w-full p-3 bg-gray-800 border rounded-lg focus:outline-none focus:border-pink-500 ${
-									formErrors.fullName
-									  ? "border-red-500"
-									  : "border-gray-700"
-								  }`}
-								/>
-								{formErrors.fullName && (
-								  <p className="mt-1 text-sm text-red-500">
-									{formErrors.fullName}
-								  </p>
-								)}
-							  </div>
+      {/* Booking Form and Map - Improved with form validation and handling */}
+      <section id="booking" className="px-4 py-20">
+        <div className="grid max-w-6xl grid-cols-1 gap-8 mx-auto md:grid-cols-2">
+          <div>
+            <h2 className="mb-8 font-serif text-3xl text-center">
+              Book Your Session
+            </h2>
+            {submitSuccess ? (
+              <div className="p-6 text-center border border-green-500 rounded-lg bg-green-900/30">
+                <svg
+                  className="w-12 h-12 mx-auto mb-4 text-green-500"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M5 13l4 4L19 7"
+                  ></path>
+                </svg>
+                <h3 className="mb-2 font-serif text-xl text-white">
+                  Booking Successful!
+                </h3>
+                <p className="mb-4 text-gray-300">
+                  Thank you for booking your session. We will contact you soon
+                  to confirm your appointment.
+                </p>
+                <button
+                  onClick={() => setSubmitSuccess(false)}
+                  className="px-6 py-2 text-white transition bg-pink-500 rounded-lg hover:bg-pink-600"
+                >
+                  Book Another Session
+                </button>
+              </div>
+            ) : (
+              <form onSubmit={handleSubmit} className="space-y-6">
+                <div className="space-y-4">
+                  <div>
+                    <input
+                      type="text"
+                      name="fullName"
+                      value={formData.fullName}
+                      onChange={handleInputChange}
+                      placeholder="Full Name"
+                      className={`w-full p-3 bg-gray-800 border rounded-lg focus:outline-none focus:border-pink-500 ${
+                        formErrors.fullName
+                          ? "border-red-500"
+                          : "border-gray-700"
+                      }`}
+                    />
+                    {formErrors.fullName && (
+                      <p className="mt-1 text-sm text-red-500">
+                        {formErrors.fullName}
+                      </p>
+                    )}
+                  </div>
 
-							  <div>
-								<input
-								  type="tel"
-								  name="contactNumber"
-								  value={formData.contactNumber}
-								  onChange={handleInputChange}
-								  placeholder="Contact Number"
-								  className={`w-full p-3 bg-gray-800 border rounded-lg focus:outline-none focus:border-pink-500 ${
-									formErrors.contactNumber
-									  ? "border-red-500"
-									  : "border-gray-700"
-								  }`}
-								/>
-								{formErrors.contactNumber && (
-								  <p className="mt-1 text-sm text-red-500">
-									{formErrors.contactNumber}
-								  </p>
-								)}
-							  </div>
+                  <div>
+                    <input
+                      type="tel"
+                      name="contactNumber"
+                      value={formData.contactNumber}
+                      onChange={handleInputChange}
+                      placeholder="Contact Number"
+                      className={`w-full p-3 bg-gray-800 border rounded-lg focus:outline-none focus:border-pink-500 ${
+                        formErrors.contactNumber
+                          ? "border-red-500"
+                          : "border-gray-700"
+                      }`}
+                    />
+                    {formErrors.contactNumber && (
+                      <p className="mt-1 text-sm text-red-500">
+                        {formErrors.contactNumber}
+                      </p>
+                    )}
+                  </div>
 
-							  <div>
-								<input
-								  type="email"
-								  name="email"
-								  value={formData.email}
-								  onChange={handleInputChange}
-								  placeholder="Email Address"
-								  className={`w-full p-3 bg-gray-800 border rounded-lg focus:outline-none focus:border-pink-500 ${
-									formErrors.email ? "border-red-500" : "border-gray-700"
-								  }`}
-								/>
-								{formErrors.email && (
-								  <p className="mt-1 text-sm text-red-500">
-									{formErrors.email}
-								  </p>
-								)}
-							  </div>
+                  <div>
+                    <input
+                      type="email"
+                      name="email"
+                      value={formData.email}
+                      onChange={handleInputChange}
+                      placeholder="Email Address"
+                      className={`w-full p-3 bg-gray-800 border rounded-lg focus:outline-none focus:border-pink-500 ${
+                        formErrors.email ? "border-red-500" : "border-gray-700"
+                      }`}
+                    />
+                    {formErrors.email && (
+                      <p className="mt-1 text-sm text-red-500">
+                        {formErrors.email}
+                      </p>
+                    )}
+                  </div>
 
-							  <div>
-								<select
-								  name="treatment"
-								  value={formData.treatment}
-								  onChange={handleInputChange}
-								  className={`w-full p-3 bg-gray-800 border rounded-lg focus:outline-none focus:border-pink-500 ${
-									formErrors.treatment
-									  ? "border-red-500"
-									  : "border-gray-700"
-								  }`}
-								>
-								  <option value="">Select Treatment</option>
-								  <option value="swedish">Swedish Massage</option>
-								  <option value="shiatsu">Shiatsu Massage</option>
-								  <option value="hotstone">Hot Stone Therapy</option>
-								  <option value="signature">
-									Signature Cherry Blossom Experience
-								  </option>
-								</select>
-								{formErrors.treatment && (
-								  <p className="mt-1 text-sm text-red-500">
-									{formErrors.treatment}
-								  </p>
-								)}
-							  </div>
+                  <div>
+                    <select
+                      name="treatment"
+                      value={formData.treatment}
+                      onChange={handleInputChange}
+                      className={`w-full p-3 bg-gray-800 border rounded-lg focus:outline-none focus:border-pink-500 ${
+                        formErrors.treatment
+                          ? "border-red-500"
+                          : "border-gray-700"
+                      }`}
+                    >
+                      <option value="">Select Treatment</option>
+                      <option value="swedish">Swedish Massage</option>
+                      <option value="shiatsu">Shiatsu Massage</option>
+                      <option value="hotstone">Hot Stone Therapy</option>
+                      <option value="signature">
+                        Signature Cherry Blossom Experience
+                      </option>
+                    </select>
+                    {formErrors.treatment && (
+                      <p className="mt-1 text-sm text-red-500">
+                        {formErrors.treatment}
+                      </p>
+                    )}
+                  </div>
 
-							  <textarea
-								name="notes"
-								value={formData.notes}
-								onChange={handleInputChange}
-								placeholder="Any special requests or notes?"
-								rows={4}
-								className="w-full p-3 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:border-pink-500"
-							  />
-							</div>
+                  {/* Date input field */}
+                  <div>
+                    <input
+                      type="date"
+                      name="date"
+                      value={formData.date}
+                      onChange={handleInputChange}
+                      min={new Date().toISOString().split("T")[0]}
+                      className={`w-full p-3 bg-gray-800 border rounded-lg focus:outline-none focus:border-pink-500 ${
+                        formErrors.date ? "border-red-500" : "border-gray-700"
+                      }`}
+                    />
+                    {formErrors.date && (
+                      <p className="mt-1 text-sm text-red-500">
+                        {formErrors.date}
+                      </p>
+                    )}
+                  </div>
 
-							{submitError && (
-							  <div className="p-3 text-red-200 border border-red-500 rounded-lg bg-red-900/30">
-								{submitError}
-							  </div>
-							)}
+                  {/* Time slot dropdown */}
+                  <div>
+                    <select
+                      name="time"
+                      value={formData.time}
+                      onChange={handleInputChange}
+                      className={`w-full p-3 bg-gray-800 border rounded-lg focus:outline-none focus:border-pink-500 ${
+                        formErrors.time ? "border-red-500" : "border-gray-700"
+                      }`}
+                    >
+                      <option value="">Select Time Slot</option>
+                      {generateTimeSlots().map((slot, index) => (
+                        <option key={index} value={slot}>
+                          {slot}
+                        </option>
+                      ))}
+                    </select>
+                    {formErrors.time && (
+                      <p className="mt-1 text-sm text-red-500">
+                        {formErrors.time}
+                      </p>
+                    )}
+                  </div>
 
-							<button
-							  type="submit"
-							  disabled={isSubmitting}
-							  className="w-full py-3 text-white transition bg-pink-500 rounded-lg hover:bg-pink-600 disabled:bg-pink-500/50 disabled:cursor-not-allowed"
-							>
-							  {isSubmitting ? (
-								<span className="flex items-center justify-center">
-								  <svg
-									className="w-5 h-5 mr-2 animate-spin"
-									xmlns="http://www.w3.org/2000/svg"
-									fill="none"
-									viewBox="0 0 24 24"
-								  >
-									<circle
-									  className="opacity-25"
-									  cx="12"
-									  cy="12"
-									  r="10"
-									  stroke="currentColor"
-									  strokeWidth="4"
-									></circle>
-									<path
-									  className="opacity-75"
-									  fill="currentColor"
-									  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-									></path>
-								  </svg>
-								  Processing...
-								</span>
-							  ) : (
-								"Book Now"
-							  )}
-							</button>
-						  </form>
-						)}
-					  </div>
-					  <div className="w-full h-full min-h-[300px] md:min-h-[400px] rounded-lg overflow-hidden">
-						<iframe
-						  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d331823.7402851301!2d120.66378321651236!3d14.566305186929052!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3397c9abc24f9f85%3A0xd920d66f8809d165!2s7829%20Makati%20Ave%2C%20Makati%2C%20Metro%20Manila!5e1!3m2!1sen!2sph!4v1739808185273!5m2!1sen!2sph"
-						  width="100%"
-						  height="100%"
-						  style={{ border: 0 }}
-						  allowFullScreen=""
-						  loading="lazy"
-						  referrerPolicy="no-referrer-when-downgrade"
-						></iframe>
-					  </div>
-					</div>
-				  </section>
+                  <textarea
+                    name="notes"
+                    value={formData.notes}
+                    onChange={handleInputChange}
+                    placeholder="Any special requests or notes?"
+                    rows={4}
+                    className="w-full p-3 bg-gray-800 border border-gray-700 rounded-lg focus:outline-none focus:border-pink-500"
+                  />
+                </div>
 
-				  {/* Footer - Improved mobile layout */}
+                
+                {submitError && (
+                  <div className="p-3 text-red-200 border border-red-500 rounded-lg bg-red-900/30">
+                    {submitError}
+                  </div>
+                )}
+
+                <button
+                  type="submit"
+                  disabled={isSubmitting}
+                  className="w-full py-3 text-white transition bg-pink-500 rounded-lg hover:bg-pink-600 disabled:bg-pink-500/50 disabled:cursor-not-allowed"
+                >
+                  {isSubmitting ? (
+                    <span className="flex items-center justify-center">
+                      <svg
+                        className="w-5 h-5 mr-2 animate-spin"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                      >
+                        <circle
+                          className="opacity-25"
+                          cx="12"
+                          cy="12"
+                          r="10"
+                          stroke="currentColor"
+                          strokeWidth="4"
+                        ></circle>
+                        <path
+                          className="opacity-75"
+                          fill="currentColor"
+                          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                        ></path>
+                      </svg>
+                      Processing...
+                    </span>
+                  ) : (
+                    "Book Now"
+                  )}
+                </button>
+              </form>
+            )}
+          </div>
+          <div className="w-full h-full min-h-[300px] md:min-h-[400px] rounded-lg overflow-hidden">
+            <iframe
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d331823.7402851301!2d120.66378321651236!3d14.566305186929052!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3397c9abc24f9f85%3A0xd920d66f8809d165!2s7829%20Makati%20Ave%2C%20Makati%2C%20Metro%20Manila!5e1!3m2!1sen!2sph!4v1739808185273!5m2!1sen!2sph"
+              width="100%"
+              height="100%"
+              style={{ border: 0 }}
+              allowFullScreen=""
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+            ></iframe>
+          </div>
+        </div>
+      </section>
+
+      {/* Footer - Improved mobile layout */}
       <footer
         id="contact"
         className="px-4 py-12 bg-black border-t border-gray-800"
