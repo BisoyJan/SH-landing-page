@@ -12,6 +12,7 @@ const SpaWebsite = () => {
     contactNumber: "",
     email: "",
     treatment: "",
+    duration: "",
     date: "",
     time: "",
     notes: "",
@@ -93,6 +94,11 @@ const SpaWebsite = () => {
       errors.treatment = "Please select a treatment";
     }
 
+    // Duration validation
+    if (!formData.duration) {
+      errors.duration = "Please select a duration";
+    }
+
     // Date validation
     if (!formData.date) {
       errors.date = "Please select a date";
@@ -130,6 +136,7 @@ const SpaWebsite = () => {
           contactNumber: formData.contactNumber,
           emailAddress: formData.email,
           treatment: formData.treatment,
+          duration: formData.duration,
           date: formData.date,
           time: formData.time,
           specialRequests: formData.notes,
@@ -145,6 +152,7 @@ const SpaWebsite = () => {
           contactNumber: "",
           email: "",
           treatment: "",
+          duration: "",
           date: "",
           time: "",
           notes: "",
@@ -685,6 +693,31 @@ const SpaWebsite = () => {
                     )}
                   </div>
 
+                  {/* Added treatment duration selection */}
+                  <div>
+                    <select
+                      name="duration"
+                      value={formData.duration}
+                      onChange={handleInputChange}
+                      className={`w-full p-3 bg-gray-800 border rounded-lg focus:outline-none focus:border-pink-500 ${
+                        formErrors.duration
+                          ? "border-red-500"
+                          : "border-gray-700"
+                      }`}
+                    >
+                      <option value="">Select Duration</option>
+                      <option value="30mins">30 mins</option>
+                      <option value="60mins">60 mins</option>
+                      <option value="90mins">90 mins</option>
+                      <option value="120mins">120 mins</option>
+                    </select>
+                    {formErrors.duration && (
+                      <p className="mt-1 text-sm text-red-500">
+                        {formErrors.duration}
+                      </p>
+                    )}
+                  </div>
+
                   {/* Date input field */}
                   <div>
                     <input
@@ -738,7 +771,6 @@ const SpaWebsite = () => {
                   />
                 </div>
 
-                
                 {submitError && (
                   <div className="p-3 text-red-200 border border-red-500 rounded-lg bg-red-900/30">
                     {submitError}

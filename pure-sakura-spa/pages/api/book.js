@@ -23,10 +23,10 @@ export default async function handler(req, res) {
     return res.status(405).json({ message: 'Method Not Allowed' });
   }
 
-  const { fullName, contactNumber, emailAddress, treatment, specialRequests, date, time = '' } = req.body;
+  const { fullName, contactNumber, emailAddress, treatment, specialRequests, date, time, duration = '' } = req.body;
 
   // Basic input validation
-  if (!fullName || !contactNumber || !emailAddress || !treatment || !date || !time) {
+  if (!fullName || !contactNumber || !emailAddress || !treatment || !date || !time || !duration) {
     return res.status(400).json({ message: 'Missing required fields.' });
   }
 
@@ -39,7 +39,7 @@ export default async function handler(req, res) {
       range: 'Sheet1!A:F',
       valueInputOption: 'USER_ENTERED',
       requestBody: {
-        values: [[fullName, contactNumber, emailAddress, treatment, specialRequests, date, time]],
+        values: [[fullName, contactNumber, emailAddress, treatment, specialRequests, date, time, duration]],
       },
     });
 
